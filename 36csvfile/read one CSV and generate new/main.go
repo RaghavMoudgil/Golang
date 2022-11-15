@@ -7,7 +7,6 @@ import (
 )
 
 // Creating a temporary sturcuture to import the data from the CSV file
-
 type studData struct {
 	Name   string
 	Rollno string
@@ -24,16 +23,17 @@ func main() {
 		panic(err)
 	}
 	defer file.Close()
-
+	//Reading the data from the CSV file
 	data, err := csv.NewReader(file).ReadAll()
 	if err != nil {
 		panic(err)
 	}
+	//Creating a new CSV file
 	csvFile, err := os.Create("Data2.csv")
 	if err != nil {
 		panic(err)
 	}
-	//inserting data in CSV file
+	//inserting data in new CSV file
 	writer := csv.NewWriter(csvFile)
 
 	for _, line := range data {
@@ -43,6 +43,7 @@ func main() {
 			Class:  line[2],
 		}
 		fmt.Println(student.Name, " ", student.Rollno, " ", student.Class)
+		//using the same loop to write the data in new CSV file
 		_ = writer.Write(line)
 	}
 
