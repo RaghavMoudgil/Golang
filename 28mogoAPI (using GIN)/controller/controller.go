@@ -52,19 +52,23 @@ func insertOneMovie(movie model.Netflix) {
 }
 
 // Update one record
-func updateOnemovie(movieId string) {
+func updateOnemovie(movie model.Netflix, movieId string) (*mongo.UpdateResult, error) {
 	id, _ := primitive.ObjectIDFromHex(movieId)
 	filter := bson.M{"_id": id} //we can also used bson,D here which is used to get the data in ordere format
-	update := bson.M{"$set": bson.M{"watched": true}}
-
-	result, err := collection.UpdateOne(context.Background(), filter, update)
+	// update := bson.M{"$set": bson.M{"watched": movie}}
+	update := bson.M{
+		"$set": bson.M{"movie": movie.Movie, "watched": movie.Watched},
+	}
+	updateMovie, err := collection.UpdateOne(context.Background(), filter, update)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	//this will help us to find how many value are going to update
 	//in this case we will get only one value
-	fmt.Println("Modified count: ", result.ModifiedCount)
+	// fmt.Println("Modified count: ", result.ModifiedCount)
+	fmt.Println("updated movie:", updateMovie)
+	return updateMovie, nil
 }
 
 // deleting one value
@@ -130,9 +134,19 @@ func CreateMovie(c *gin.Context) {
 }
 
 func MarkAsWatched(c *gin.Context) {
+	var movie model.Netflix
+	err := c.BindJSON(&movie)
+	if err != nil {
+		log.Fatal(err)
+	}
 	param := c.Param("id")
-	updateOnemovie(param)
-	c.JSON(http.StatusOK, gin.H{"result": param})
+	fmt.Println("Id:", param)
+	res, err := updateOnemovie(movie, param)
+	if err != nil {
+		fmt.Println("Error", err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"result": res})
 }
 
 func DeleteOneMovie(c *gin.Context) {
