@@ -1,0 +1,13 @@
+DATABASE:
+  HOST: "127.0.0.1"
+  DBNAME: "test"
+  PASSWORD: "root"
+  USER: "root"
+  PORT: 3306
+
+# DATABASE:
+#   HOST: "127.0.0.1"
+#   DBNAME: "student"
+#   PASSWORD: "root"
+#   USER: "root"
+#   PORT: 3306
