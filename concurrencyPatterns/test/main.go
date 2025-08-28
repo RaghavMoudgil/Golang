@@ -1,8 +1,6 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 //  worker pool
 // func worker(id int, jobs <-chan int, wg *sync.WaitGroup) {
@@ -140,13 +138,59 @@ import (
 
 // reversing an array
 
-func main() {
-	arr := []int{1, 5, 15, 48, 35, 9}
-	for i := 0; i < len(arr)/2; i++ {
-		temp := arr[i]
-		arr[i] = arr[len(arr)-1-i]
-		arr[len(arr)-1-i] = temp
-	}
-	fmt.Println(arr)
+// func main() {
+// 	arr := []int{1, 5, 15, 48, 35, 9}
+// 	for i := 0; i < len(arr)/2; i++ {
+// 		temp := arr[i]
+// 		arr[i] = arr[len(arr)-1-i]
+// 		arr[len(arr)-1-i] = temp
+// 	}
+// 	fmt.Println(arr)
 
+// }
+
+// find contiguos subarray( kadane's algo)
+
+// func maxSubArray(nums []int) (int, []int) {
+// 	// subArr := make([]int, 0)
+// 	var subArr []int
+// 	start, end, s := 0, 0, 0
+// 	maxSoFar, maxEndingHere := nums[0], nums[0]
+// 	for i := 1; i < len(nums); i++ {
+// 		if nums[i] > maxEndingHere+nums[i] {
+// 			maxEndingHere = nums[i]
+// 			s = i
+// 		} else {
+// 			maxEndingHere = maxEndingHere + nums[i]
+// 		}
+// 		if maxEndingHere > maxSoFar {
+// 			maxSoFar = maxEndingHere
+// 			start = s
+// 			end = i
+// 		}
+// 	}
+// 	subArr = nums[start : end+1]
+// 	return maxSoFar, subArr
+// }
+
+// func main() {
+// 	arr := []int{1, -2, 5, -3, 4, -1, 6}
+// 	fmt.Println(maxSubArray(arr))
+// }
+
+//reverse a string
+
+func reverse(str string) string {
+	run := []rune(str)
+
+	for i, j := 0, len(run)-1; i < j; i, j = i+1, j-1 {
+		run[i], run[j] = run[j], run[i]
+	}
+
+	return string(run)
+
+}
+func main() {
+	str := "yo yo honey singh"
+	fmt.Println(reverse(str))
 }
