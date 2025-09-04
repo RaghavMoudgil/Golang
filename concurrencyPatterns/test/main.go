@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"strconv"
+	"unicode"
 )
 
 //  worker pool
@@ -235,28 +237,73 @@ import (
 
 //product of array except self
 
-func productExceptSelf(nums []int) []int {
-	n := len(nums)
-	result := make([]int, n)
+// func productExceptSelf(nums []int) []int {
+// 	n := len(nums)
+// 	result := make([]int, n)
 
-	// Step 1: Populate result with products of elements to the left of i
-	leftProduct := 1
-	for i := 0; i < n; i++ {
-		result[i] = leftProduct
-		leftProduct *= nums[i]
+// 	// Step 1: Populate result with products of elements to the left of i
+// 	leftProduct := 1
+// 	for i := 0; i < n; i++ {
+// 		result[i] = leftProduct
+// 		leftProduct *= nums[i]
+// 	}
+
+// 	// Step 2: Multiply with products of elements to the right of i
+// 	rightProduct := 1
+// 	for i := n - 1; i >= 0; i-- {
+// 		result[i] *= rightProduct
+// 		rightProduct *= nums[i]
+// 	}
+
+// 	return result
+// }
+
+// func main() {
+// 	fmt.Println(productExceptSelf([]int{2, 4, 3, 6}))      // Output: [24, 12, 8, 6]
+// 	fmt.Println(productExceptSelf([]int{-1, 1, 0, -3, 3})) // Output: [0, 0, 9, 0, 0]
+// }
+
+func decodeString(s string) string {
+
+	var numStack []int
+	var strStack []string
+	currentStr := ""
+	num := 0
+
+	for _, char := range s {
+		if unicode.IsDigit(char) {
+			// Build the current number (could be multiple digits)
+			digit, _ := strconv.Atoi(string(char))
+			num = num*10 + digit
+		} else if char == '[' {
+			// Push current number and string to stacks
+			numStack = append(numStack, num)
+			strStack = append(strStack, currentStr)
+			// Reset current number and string
+			num = 0
+			currentStr = ""
+		} else if char == ']' {
+			// Pop number from numStack
+			repeatCount := numStack[len(numStack)-1]
+			numStack = numStack[:len(numStack)-1]
+			// Pop string from strStack
+			prevStr := strStack[len(strStack)-1]
+			strStack = strStack[:len(strStack)-1]
+			// Repeat currentStr repeatCount times
+			repeated := ""
+			for i := 0; i < repeatCount; i++ {
+				repeated += currentStr
+			}
+			// Append repeated string to previous string
+			currentStr = prevStr + repeated
+		} else {
+			// Regular character, append to current string
+			currentStr += string(char)
+		}
 	}
-
-	// Step 2: Multiply with products of elements to the right of i
-	rightProduct := 1
-	for i := n - 1; i >= 0; i-- {
-		result[i] *= rightProduct
-		rightProduct *= nums[i]
-	}
-
-	return result
+	return currentStr
 }
 
 func main() {
-	fmt.Println(productExceptSelf([]int{2, 4, 3, 6}))      // Output: [24, 12, 8, 6]
-	fmt.Println(productExceptSelf([]int{-1, 1, 0, -3, 3})) // Output: [0, 0, 9, 0, 0]
+	fmt.Println(decodeString("3[a]2[bc]"))
 }
