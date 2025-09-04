@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 //  worker pool
 // func worker(id int, jobs <-chan int, wg *sync.WaitGroup) {
@@ -180,20 +182,81 @@ import "fmt"
 
 //string is palindrome
 
-func ifPalin(str string) bool {
-	run := []rune(str)
+// func ifPalin(str string) bool {
+// 	run := []rune(str)
 
-	for i, j := 0, len(run)-1; i < j; i, j = i+1, j-1 {
-		run[i], run[j] = run[j], run[i]
+// 	for i, j := 0, len(run)-1; i < j; i, j = i+1, j-1 {
+// 		run[i], run[j] = run[j], run[i]
+// 	}
+// 	rev := string(run)
+// 	if rev == str {
+// 		return true
+// 	} else {
+// 		return false
+// 	}
+// }
+// func main() {
+// 	str := "kanak"
+// 	fmt.Println(ifPalin(str))
+// }
+
+//3 sum = target
+
+//group anargams
+
+// func groupAnagrams(strs []string) [][]string {
+// 	anagramMap := make(map[string][]string)
+
+// 	for _, str := range strs {
+// 		// Convert the string to a slice of runes for sorting
+// 		chars := strings.Split(str, "")
+// 		sort.Strings(chars)
+// 		sortedStr := strings.Join(chars, "")
+// 		anagramMap[sortedStr] = append(anagramMap[sortedStr], str)
+// 	}
+
+// 	result := make([][]string, 0, len(anagramMap))
+// 	for _, group := range anagramMap {
+// 		result = append(result, group)
+// 	}
+// 	return result
+// }
+
+// func main() {
+// 	input1 := []string{"eat", "tea", "tan", "ate", "nat", "bat"}
+// 	fmt.Println(groupAnagrams(input1)) // Output: [["bat"],["nat","tan"],["ate","eat","tea"]]
+
+// 	input2 := []string{""}
+// 	fmt.Println(groupAnagrams(input2)) // Output: [[""]]
+
+// 	input3 := []string{"a"}
+// 	fmt.Println(groupAnagrams(input3)) // Output: [["a"]]
+// }
+
+//product of array except self
+
+func productExceptSelf(nums []int) []int {
+	n := len(nums)
+	result := make([]int, n)
+
+	// Step 1: Populate result with products of elements to the left of i
+	leftProduct := 1
+	for i := 0; i < n; i++ {
+		result[i] = leftProduct
+		leftProduct *= nums[i]
 	}
-	rev := string(run)
-	if rev == str {
-		return true
-	} else {
-		return false
+
+	// Step 2: Multiply with products of elements to the right of i
+	rightProduct := 1
+	for i := n - 1; i >= 0; i-- {
+		result[i] *= rightProduct
+		rightProduct *= nums[i]
 	}
+
+	return result
 }
+
 func main() {
-	str := "kanak"
-	fmt.Println(ifPalin(str))
+	fmt.Println(productExceptSelf([]int{2, 4, 3, 6}))      // Output: [24, 12, 8, 6]
+	fmt.Println(productExceptSelf([]int{-1, 1, 0, -3, 3})) // Output: [0, 0, 9, 0, 0]
 }
