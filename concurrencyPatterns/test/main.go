@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"strconv"
-	"unicode"
+	"runtime"
+	"time"
 )
 
 //  worker pool
@@ -263,47 +263,173 @@ import (
 // 	fmt.Println(productExceptSelf([]int{-1, 1, 0, -3, 3})) // Output: [0, 0, 9, 0, 0]
 // }
 
-func decodeString(s string) string {
+// func decodeString(s string) string {
 
-	var numStack []int
-	var strStack []string
-	currentStr := ""
-	num := 0
+// 	var numStack []int
+// 	var strStack []string
+// 	currentStr := ""
+// 	num := 0
 
-	for _, char := range s {
-		if unicode.IsDigit(char) {
-			// Build the current number (could be multiple digits)
-			digit, _ := strconv.Atoi(string(char))
-			num = num*10 + digit
-		} else if char == '[' {
-			// Push current number and string to stacks
-			numStack = append(numStack, num)
-			strStack = append(strStack, currentStr)
-			// Reset current number and string
-			num = 0
-			currentStr = ""
-		} else if char == ']' {
-			// Pop number from numStack
-			repeatCount := numStack[len(numStack)-1]
-			numStack = numStack[:len(numStack)-1]
-			// Pop string from strStack
-			prevStr := strStack[len(strStack)-1]
-			strStack = strStack[:len(strStack)-1]
-			// Repeat currentStr repeatCount times
-			repeated := ""
-			for i := 0; i < repeatCount; i++ {
-				repeated += currentStr
-			}
-			// Append repeated string to previous string
-			currentStr = prevStr + repeated
-		} else {
-			// Regular character, append to current string
-			currentStr += string(char)
-		}
-	}
-	return currentStr
-}
+// 	for _, char := range s {
+// 		if unicode.IsDigit(char) {
+// 			// Build the current number (could be multiple digits)
+// 			digit, _ := strconv.Atoi(string(char))
+// 			num = num*10 + digit
+// 		} else if char == '[' {
+// 			// Push current number and string to stacks
+// 			numStack = append(numStack, num)
+// 			strStack = append(strStack, currentStr)
+// 			// Reset current number and string
+// 			num = 0
+// 			currentStr = ""
+// 		} else if char == ']' {
+// 			// Pop number from numStack
+// 			repeatCount := numStack[len(numStack)-1]
+// 			numStack = numStack[:len(numStack)-1]
+// 			// Pop string from strStack
+// 			prevStr := strStack[len(strStack)-1]
+// 			strStack = strStack[:len(strStack)-1]
+// 			// Repeat currentStr repeatCount times
+// 			repeated := ""
+// 			for i := 0; i < repeatCount; i++ {
+// 				repeated += currentStr
+// 			}
+// 			// Append repeated string to previous string
+// 			currentStr = prevStr + repeated
+// 		} else {
+// 			// Regular character, append to current string
+// 			currentStr += string(char)
+// 		}
+// 	}
+// 	return currentStr
+// }
+
+// func main() {
+// 	fmt.Println(decodeString("3[a]2[bc]"))
+// }
+
+//threeSumClosest
+// func threeSumClosest(nums []int, target int) int {
+// 	sort.Ints(nums)
+// 	closest := nums[0] + nums[1] + nums[2]
+// 	for i := 0; i < len(nums)-2; i++ {
+
+// 		left, right := i+1, len(nums)-1
+// 		for left < right {
+// 			sum := nums[i] + nums[left] + nums[right]
+// 			if abs(sum-target) < abs(closest-target) {
+// 				closest = sum
+// 			}
+// 			if sum < target {
+// 				left++ // Move left to increase sum
+// 			} else {
+// 				right-- // Move right to decrease sum
+// 			}
+
+// 		}
+// 	}
+// 	return closest
+// }
+
+// func abs(x int) int {
+// 	if x < 0 {
+// 		return -x
+// 	}
+// 	return x
+// }
+// func main() {
+// 	nums := []int{-1, 2, 1, -4}
+// 	target := 1
+// 	fmt.Println(threeSumClosest(nums, target)) // Output: 2
+// }
+
+// valid parantheses
+
+// func isValid(s string) bool {
+// 	stack := []rune{}
+// 	bracketMap := map[rune]rune{')': '(', '}': '{', ']': '['}
+
+// 	for _, char := range s {
+// 		switch char {
+// 		case '(', '{', '[':
+// 			stack = append(stack, char)
+// 		case ')', '}', ']':
+// 			if len(stack) == 0 || stack[len(stack)-1] != bracketMap[char] {
+// 				return false
+// 			}
+// 			stack = stack[:len(stack)-1]
+// 		}
+
+// 	}
+// 	return len(stack) == 0
+
+// }
+
+// func main() {
+// 	fmt.Println(isValid("()"))
+// }
+
+//phone number combination
+
+// func letterCombinations(digits string) []string {
+// 	if digits == "" {
+// 		return []string{}
+// 	}
+// 	mapping := map[byte]string{
+// 		'2': "abc", '3': "def", '4': "ghi", '5': "jkl",
+// 		'6': "mno", '7': "pqrs", '8': "tuv", '9': "wxyz",
+// 	}
+// 	var result []string
+
+// 	var backtrack func(index int, curr string)
+// 	backtrack = func(index int, curr string) {
+// 		if index == len(digits) {
+// 			result = append(result, curr)
+// 			return
+// 		}
+// 		letters := mapping[digits[index]]
+// 		for i := 0; i < len(letters); i++ {
+// 			backtrack(index+1, curr+string(letters[i]))
+// 		}
+// 	}
+// 	backtrack(0, "")
+// 	return result
+
+// }
+// func main() {
+// 	fmt.Println(letterCombinations("23"))
+// }
+
+// remove duplicate from sorted array
+
+// func removeDuplicates(nums []int) int {
+// 	if len(nums) == 0 {
+// 		return 0
+// 	}
+// 	j := 0
+// 	for i := 1; i < len(nums); i++ {
+// 		if nums[i] != nums[j] {
+// 			j++
+// 			nums[j] = nums[i]
+// 		}
+// 	}
+// 	return j + 1
+
+// }
+
+// func main() {
+// 	fmt.Println(removeDuplicates([]int{0, 0, 1, 1, 1, 2, 2, 3, 3, 4}))
+// }
+
+// routine leaks
 
 func main() {
-	fmt.Println(decodeString("3[a]2[bc]"))
+	go func() {
+		for {
+			time.Sleep(10 * time.Second)
+		}
+	}()
+
+	time.Sleep(1 * time.Second)
+	fmt.Println("Number of Goroutines:", runtime.NumGoroutine())
 }
