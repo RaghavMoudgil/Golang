@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-	"runtime"
-	"time"
 )
 
 //  worker pool
@@ -423,13 +421,33 @@ import (
 
 // routine leaks
 
-func main() {
-	go func() {
-		for {
-			time.Sleep(10 * time.Second)
-		}
-	}()
+// func main() {
+// 	go func() {
+// 		for {
+// 			time.Sleep(10 * time.Second)
+// 		}
+// 	}()
 
-	time.Sleep(1 * time.Second)
-	fmt.Println("Number of Goroutines:", runtime.NumGoroutine())
+// 	time.Sleep(1 * time.Second)
+// 	fmt.Println("Number of Goroutines:", runtime.NumGoroutine())
+// }
+
+// find out unique slice using generics
+func uniqueSlice[t comparable](input []t) []t {
+	var result []t
+	seen := make(map[t]bool)
+	for _, v := range input {
+		if !seen[v] {
+			seen[v] = true
+			result = append(result, v)
+		}
+
+	}
+
+	return result
+}
+
+func main() {
+	fmt.Println(uniqueSlice([]int{1, 2, 4, 5, 3, 4, 3, 5, 1, 2}))
+	fmt.Println(uniqueSlice([]string{"a", "a", "a", "f", "g", "d", "d", "g"}))
 }
